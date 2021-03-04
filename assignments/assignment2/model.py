@@ -110,8 +110,9 @@ def execute_models(models):
                 'n_features': len(optimal_f_selection),
                 'features': optimal_f_selection
             }
-        except:
+        except Exception as e:
             print(f'error occured during {m} model')
+            print(e)
             pass
 
     return model_comparison, outputdfs
