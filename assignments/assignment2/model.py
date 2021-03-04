@@ -91,7 +91,7 @@ def _model(X_train, X_test, y_train, y_test, method, seed=99):
 
     return round(metrics.accuracy_score(y_test, y_predict), 7)
 
-def execute_models(models):
+def execute_models(dataf, ycolumn, xcolumns, test_size, models, seed):
     """Loop model execution on forward feature selection"""
 
     model_comparison = {}
@@ -99,7 +99,7 @@ def execute_models(models):
     for m in models:
         try:
             print(f'==> running {m}')
-            output = _seq_forward_selection(df, ycolumn, xcolumns, test_size, method=m, seed=seed)
+            output = _seq_forward_selection(dataf, ycolumn, xcolumns, test_size, method=m, seed=seed)
             dfoutput = pd.DataFrame(output, columns=['n_features', 'features', 'score'])
             dfoutput.index = dfoutput['n_features']
             outputdfs.append(dfoutput)
@@ -172,7 +172,7 @@ def main():
         'boosting'
     ]
 
-    model_comparison, outputdfs = execute_models(models)
+    model_comparison, outputdfs = execute_models(df, ycolumn, xcolumns, test_size, models, seed)
 
     nowstamp = datetime.now().strftime('%Y%m%d%H%M%S')
     with open(f'data/output/model_outputs_{nowstamp}.json', 'w') as stream:
