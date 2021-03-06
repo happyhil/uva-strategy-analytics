@@ -40,7 +40,9 @@ def main():
         'time_signature',
         'chorus_hit',
         'sections',
+        'n_artist_tracks'
     ]
+    dffull['n_artist_tracks'] = dffull.groupby('artist')['track'].transform('count')
     dfselect = dffull[features]
     dfselect.to_csv('data/prepped/spotify_featured.csv',
                     index=False,
