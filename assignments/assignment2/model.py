@@ -177,7 +177,8 @@ def main():
     nowstamp = datetime.now().strftime('%Y%m%d%H%M%S')
     with open(f'data/output/model_outputs_{nowstamp}.json', 'w') as stream:
         json.dump(model_comparison, stream)
-        
+
+    df = pd.concat(outputdfs)
     outputdfs.to_csv(f'data/output/model_outputs_{nowstamp}.csv', index=False)
 
 if __name__ == '__main__':
