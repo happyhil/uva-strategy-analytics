@@ -179,7 +179,7 @@ def main():
         json.dump(model_comparison, stream)
 
     df = pd.concat(outputdfs)
-    outputdfs.to_csv(f'data/output/model_outputs_{nowstamp}.csv', index=False)
+    df.to_csv(f'data/output/model_outputs_{nowstamp}.csv', index=False)
 
 if __name__ == '__main__':
     main()
