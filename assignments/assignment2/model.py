@@ -16,6 +16,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn import metrics
+import matplotlib
+import matplotlib.pyplot as plt
 
 
 def _seq_forward_selection(dataf, ycolumn, xcolumns, test_size, method, seed=99):
@@ -44,7 +46,7 @@ def _seq_forward_selection(dataf, ycolumn, xcolumns, test_size, method, seed=99)
     return selected_full
 
 
-def _model(X_train, X_test, y_train, y_test, method, seed=99):
+def _model(X_train, X_test, y_train, y_test, method, seed=99, return_model=False):
     """Fit model and predict on test set"""
 
     if method == 'tree':
@@ -88,8 +90,11 @@ def _model(X_train, X_test, y_train, y_test, method, seed=99):
         classifier = GradientBoostingClassifier(**params)
         classifier.fit(X_train, y_train)
         y_predict = classifier.predict(X_test)
-
-    return round(metrics.accuracy_score(y_test, y_predict), 7)
+        
+    if return_model:
+        return classifier
+    else:
+        return round(metrics.accuracy_score(y_test, y_predict), 7)
 
 def execute_models(dataf, ycolumn, xcolumns, test_size, models, seed):
     """Loop model execution on forward feature selection"""
@@ -117,7 +122,7 @@ def execute_models(dataf, ycolumn, xcolumns, test_size, models, seed):
 
     return model_comparison, outputdfs
 
-def tree_fit_score(X_train, y_train, X_test=None, y_test=None, n_nodes=None, use_testset=True, method=None):
+def tree_fit_score(X_train, y_train, X_test=None, y_test=None, n_nodes=None, use_testset=True, method=None, seed=99):
     """Fit model on training data, and calculate accuracy based on training or test data"""
 
     if method == 'tree':
@@ -133,7 +138,7 @@ def tree_fit_score(X_train, y_train, X_test=None, y_test=None, n_nodes=None, use
         score = metrics.accuracy_score(y_test, y_predict)
     return score
 
-def n_node_increase_scores(X_train, y_train, X_test, y_test, depth_range, method):
+def n_node_increase_scores(X_train, y_train, X_test, y_test, depth_range, method, seed):
     """Get model accuracies for the given n nodes range"""
 
     rows = []
